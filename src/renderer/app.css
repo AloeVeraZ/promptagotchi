@@ -1,0 +1,186 @@
+/* The Promptagotchi app window: a title bar with two tabs (Run, Editor). */
+
+#titlebar {
+  height: 52px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid var(--line);
+  background: #1b181d;
+  -webkit-app-region: drag;
+  user-select: none;
+}
+#tabs {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 11px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+  -webkit-app-region: no-drag;
+}
+#tabs .tab {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 14px 5px 10px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 600;
+}
+#tabs .tab svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+#tabs .tab:hover { color: var(--text); background: rgba(255, 255, 255, 0.05); }
+#tabs .tab.on { background: var(--accent); color: #24130b; }
+#tabs .tab.on svg rect[fill] { fill: var(--accent); }
+
+.view { display: none; flex: 1; min-height: 0; }
+body.tab-home #view-home,
+body.tab-settings #view-settings,
+body.tab-debug #view-debug { display: flex; flex-direction: column; }
+body.tab-editor #view-editor { display: grid; }
+
+/* Run and Debug are fixed pages: one inner list scrolls, the page never does.
+   Settings is one page that scrolls as a whole, with nothing scrolling inside it. */
+.page { flex: 1; min-height: 0; width: 100%; box-sizing: border-box; padding: 18px; }
+.page.fixed { display: flex; flex-direction: column; gap: 14px; overflow: hidden; max-width: 1240px; margin: 0 auto; }
+.page.scroll { overflow-y: auto; }
+.settings { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+.hcard.grow { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.hcard.grow .table-wrap { flex: 1; min-height: 0; max-height: none; }
+.debug-top { display: grid; grid-template-columns: 1.5fr 1fr; gap: 14px; flex-shrink: 0; }
+kbd { font: 11px var(--mono); padding: 1px 5px; border-radius: 4px; border: 1px solid var(--line); background: var(--panel-2); }
+.hook-list { margin: 6px 0 0; padding-left: 18px; color: var(--muted); font-size: 12px; columns: 2; }
+.hook-list li { margin: 2px 0; }
+.hook-list code { font-size: 11px; }
+
+.filters { display: flex; gap: 4px; flex-wrap: wrap; margin-left: 6px; }
+.filters button { font-size: 11px; padding: 3px 8px; border-radius: 12px; color: var(--muted); }
+.filters button.on { color: var(--text); border-color: var(--accent); background: rgba(228, 138, 99, 0.16); }
+#event-log.hide-tools .ev[data-cat='tools'],
+#event-log.hide-prompts .ev[data-cat='prompts'],
+#event-log.hide-stops .ev[data-cat='stops'],
+#event-log.hide-agents .ev[data-cat='agents'],
+#event-log.hide-attention .ev[data-cat='attention'],
+#event-log.hide-sessions .ev[data-cat='sessions'] { display: none; }
+
+/* ------------------------------------------------------------------ Run tab */
+.home {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  padding: 18px;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+.hcard {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px 18px;
+  min-width: 0;
+}
+.hcard.wide { grid-column: 1 / -1; }
+.hcard h3 { margin: 0 0 10px; font-size: 13px; color: var(--muted); font-weight: 650; text-transform: uppercase; letter-spacing: 0.06em; }
+.hhead { display: flex; align-items: baseline; gap: 10px; margin-bottom: 8px; }
+.hhead h3 { margin: 0; }
+.spacer { flex: 1; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.lbl { color: var(--muted); font-size: 12px; }
+.hero-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+label.inline { flex-direction: row; align-items: center; gap: 8px; font-size: 12px; margin-top: 10px; }
+label.check { margin-top: 10px; }
+select {
+  font: inherit;
+  color: var(--text);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  padding: 5px 8px;
+}
+
+.hero { flex-shrink: 0; display: grid; grid-template-columns: 240px 1fr; gap: 22px; align-items: center; }
+.hero-stage {
+  height: 170px;
+  border-radius: 12px;
+  display: grid;
+  place-items: end center;
+  padding-bottom: 18px;
+  background: radial-gradient(circle at 50% 120%, rgba(228, 138, 99, 0.3), transparent 62%), #141215;
+  border: 1px solid var(--line);
+}
+#home-pet { line-height: 0; }
+#home-pet canvas, #home-pet img { image-rendering: pixelated; }
+.kicker { color: var(--good); font-size: 12px; font-weight: 650; }
+.kicker.off { color: var(--muted); }
+.hero h2 { margin: 2px 0 0; font-size: 26px; }
+
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; padding: 5px 12px; background: transparent; }
+.seg button + button { border-left: 1px solid var(--line); }
+.seg button.on { background: var(--accent); color: #24130b; }
+
+.status-line { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.sdot { width: 9px; height: 9px; border-radius: 50%; background: var(--muted); }
+.sdot.on { background: var(--good); box-shadow: 0 0 0 3px rgba(99, 201, 143, 0.2); }
+.sdot.half { background: #f6bd4b; }
+
+/* sessions table */
+.table-wrap { max-height: 330px; overflow: auto; border: 1px solid var(--line); border-radius: 10px; }
+#sess-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+#sess-table th { position: sticky; top: 0; background: var(--panel-2); text-align: left; font-weight: 600; color: var(--muted); padding: 7px 10px; font-size: 11.5px; }
+#sess-table td { padding: 7px 10px; border-top: 1px solid var(--line); vertical-align: top; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#sess-table tr { cursor: pointer; }
+#sess-table tbody tr:hover { background: rgba(255, 255, 255, 0.04); }
+#sess-table .st { width: 10px; padding-right: 0; }
+#sess-table .st i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #7a716b; margin-top: 4px; }
+#sess-table .st i.working { background: #e48a63; }
+#sess-table .st i.question { background: #f6bd4b; }
+#sess-table .st i.done { background: var(--good); }
+#sess-table .st i.ended { background: transparent; box-shadow: inset 0 0 0 1.5px #6f6762; }
+#sess-table .t b { font-weight: 600; }
+#sess-table .t small { display: block; color: var(--muted); }
+#sess-table td.x { width: 24px; text-align: right; }
+#sess-table td.x button { padding: 0 6px; border: 0; background: transparent; color: var(--muted); font-size: 15px; }
+#sess-table td.x button:hover { color: var(--text); }
+#sess-table tr.nope { animation: nope 0.36s; }
+@keyframes nope { 25% { transform: translateX(-4px); } 60% { transform: translateX(4px); } }
+.empty-row td { color: var(--muted); text-align: center; padding: 18px; cursor: default; }
+
+/* debug */
+.kv { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; margin: 0; font-size: 12.5px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; font-family: var(--mono); font-size: 12px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.kv .ok { color: var(--good); }
+.kv .bad { color: var(--bad); }
+
+#event-log {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  font: 11.5px/1.5 var(--mono);
+  background: #141215;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+#event-log .ev { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#event-log .ev time { color: #6f6762; margin-right: 8px; }
+#event-log .ev b { color: var(--accent); font-weight: 600; margin-right: 6px; }
+#event-log .ev .who { color: #cfc6bf; margin-right: 6px; }
+#event-log .ev .what { color: var(--muted); }
+#event-log .ev.attn b { color: #f6bd4b; }
+#event-log .ev.done b { color: var(--good); }
+
+@media (max-width: 980px) {
+  .debug-top { grid-template-columns: 1fr; }
+  .hero { grid-template-columns: 180px 1fr; }
+}
+
+.sc-row { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
+.sc-row span { flex: 1; }
+.sc-row kbd.sc { font-size: 13px; padding: 3px 9px; min-width: 70px; text-align: center; }
+.sc-row kbd.sc.bad { border-color: var(--bad); color: var(--bad); }

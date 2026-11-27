@@ -1,0 +1,305 @@
+{
+  "id": "mochi",
+  "name": "Mochi",
+  "author": "Promptagotchi",
+  "description": "A squishy rice-cake blob. Hand-drawn in pet.json in about ten minutes: a good one to copy.",
+  "frameWidth": 16,
+  "frameHeight": 14,
+  "pixelArt": true,
+  "palette": {
+    ".": "transparent",
+    "k": "#3B2A31",
+    "w": "#FFF6F1",
+    "o": "#EBD8D0",
+    "p": "#F6AFC0",
+    "b": "#8FD3FF",
+    "s": "rgba(0,0,0,0.2)"
+  },
+  "animations": {
+    "idle": {
+      "durations": [
+        1200,
+        500,
+        1000,
+        120
+      ],
+      "frames": [
+        [
+          "................",
+          "................",
+          "................",
+          ".....kkkkkk.....",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwwkwwwwkwwk..",
+          ".kwwwkwwwwkwwwk.",
+          ".kwppwwwwwwppwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "....ssssssss...."
+        ],
+        [
+          "................",
+          "................",
+          "................",
+          "................",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwwkwwwwkwwk..",
+          ".kwwwkwwwwkwwwk.",
+          ".kwppwwwwwwppwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "....ssssssss...."
+        ],
+        [
+          "................",
+          "................",
+          "................",
+          ".....kkkkkk.....",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwwkwwwwkwwk..",
+          ".kwwwkwwwwkwwwk.",
+          ".kwppwwwwwwppwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "....ssssssss...."
+        ],
+        [
+          "................",
+          "................",
+          "................",
+          ".....kkkkkk.....",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwwwwwwwwwwk..",
+          ".kwwwkwwwwkwwwk.",
+          ".kwppwwwwwwppwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "....ssssssss...."
+        ]
+      ]
+    },
+    "working": {
+      "durations": [
+        220,
+        220,
+        220,
+        220
+      ],
+      "frames": [
+        [
+          "................",
+          "................",
+          "................",
+          ".....kkkkkk..b..",
+          "...kkwwwwwwkbb..",
+          "..kwwwwwwwwwwk..",
+          "..kwwwwwwwwwwk..",
+          ".kwwkkwwwwkkwwk.",
+          ".kwppwwwwwwppwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "....ssssssss...."
+        ],
+        [
+          "................",
+          "................",
+          ".....kkkkkk..b..",
+          "...kkwwwwwwkbb..",
+          "..kwwwwwwwwwwk..",
+          "..kwwwwwwwwwwk..",
+          ".kwwkkwwwwkkwwk.",
+          ".kwppwwwwwwppwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "................",
+          "....ssssssss...."
+        ],
+        [
+          "................",
+          "................",
+          "................",
+          ".....kkkkkk.....",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwwwwwwwwwwk..",
+          ".kwwkkwwwwkkwwk.",
+          ".kwppwwwwwwppwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "....ssssssss...."
+        ],
+        [
+          "................",
+          "................",
+          ".....kkkkkk.....",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwwwwwwwwwwk..",
+          ".kwwkkwwwwkkwwk.",
+          ".kwppwwwwwwppwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "................",
+          "....ssssssss...."
+        ]
+      ]
+    },
+    "question": {
+      "durations": [
+        300,
+        300
+      ],
+      "frames": [
+        [
+          "................",
+          "................",
+          "................",
+          ".....kkkkkk.....",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwwkwwwwkwwk..",
+          ".kwwwkwwwwkwwwk.",
+          ".kwppkwwwwkppwk.",
+          ".kwwwwwkkwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "....ssssssss...."
+        ],
+        [
+          "................",
+          ".....kkkkkk.....",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwkwwwwkkwwk..",
+          ".kwwwkwwwwkwwwk.",
+          ".kwppkwwwwkppwk.",
+          ".kwwwwwkkwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kwkkkkwkkk...",
+          "................",
+          "................",
+          "....ssssssss...."
+        ]
+      ]
+    },
+    "done": {
+      "durations": [
+        160,
+        160,
+        700
+      ],
+      "frames": [
+        [
+          "................",
+          ".....kkkkkk.....",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwwkwwwwkwwk..",
+          ".kwwkwkwwkwkwwk.",
+          ".kwppwwwwwwppwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "................",
+          "................",
+          "....ssssssss...."
+        ],
+        [
+          ".....kkkkkk.....",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwwkwwwwkwwk..",
+          ".kwwkwkwwkwkwwk.",
+          ".kwppwwwwwwppwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "................",
+          "................",
+          "................",
+          "....ssssssss...."
+        ],
+        [
+          "................",
+          "................",
+          "................",
+          ".....kkkkkk.....",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwwkwwwwkwwk..",
+          ".kwwkwkwwkwkwwk.",
+          ".kwppwwwwwwppwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "....ssssssss...."
+        ]
+      ]
+    },
+    "sleep": {
+      "durations": [
+        1400,
+        1400
+      ],
+      "frames": [
+        [
+          "................",
+          "................",
+          "................",
+          ".....kkkkkk.....",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwwwwwwwwwwk..",
+          ".kwwwwwwwwwwwwk.",
+          ".kwwkkwwwwkkwwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "....ssssssss...."
+        ],
+        [
+          "................",
+          "................",
+          "................",
+          "................",
+          "...kkwwwwwwkk...",
+          "..kwwwwwwwwwwk..",
+          "..kwwwwwwwwwwk..",
+          ".kwwwwwwwwwwwwk.",
+          ".kwwkkwwwwkkwwk.",
+          ".kwwwwwwwwwwwwk.",
+          ".kowwwwwwwwwwok.",
+          "..kooooooooook..",
+          "...kkkkkkkkkk...",
+          "....ssssssss...."
+        ]
+      ]
+    }
+  }
+}

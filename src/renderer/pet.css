@@ -1,0 +1,130 @@
+:root {
+  --z: 1;              /* screen-based zoom, set from the main process */
+  --pet-h: 112px;
+  --pet-w: 128px;
+  --pad-bottom: 4px;
+  --sprite-bottom: 4px;
+  --head-inset: 0px;
+  --question: #f6bd4b;
+  --done: #63c98f;
+  --error: #ec6a62;
+  --working: #e48a63;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: transparent;
+  font: 12px/1 -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+#pet {
+  position: absolute;
+  left: 50%;
+  bottom: var(--sprite-bottom);
+  transform: translateX(-50%);
+  line-height: 0;
+  cursor: grab;
+  filter: drop-shadow(0 calc(3px * var(--z)) calc(6px * var(--z)) rgba(0, 0, 0, 0.2));
+  transition: transform 0.18s cubic-bezier(.3, 1.6, .5, 1);
+}
+#pet:hover { transform: translateX(-50%) translateY(-2px); }
+#pet.dragging { cursor: grabbing; transform: translateX(-50%); }
+#pet .pet-canvas, #pet .pet-gif { display: block; image-rendering: pixelated; pointer-events: none; }
+#pet.smooth .pet-canvas { image-rendering: auto; }
+
+/* speech bubble right on top of the head */
+#bubble {
+  --s: calc(26px * var(--z));
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--sprite-bottom) + var(--pet-h) - var(--head-inset) + 7px * var(--z));
+  transform: translateX(-50%) scale(0);
+  min-width: var(--s);
+  height: var(--s);
+  padding: 0 calc(7px * var(--z));
+  border-radius: calc(var(--s) / 2);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: calc(15px * var(--z));
+  color: #1d1a18;
+  background: var(--bubble-bg, var(--question));
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.25), 0 6px 14px rgba(0, 0, 0, 0.25);
+  transition: transform 0.25s cubic-bezier(.3, 1.6, .5, 1);
+  pointer-events: none;
+  white-space: nowrap;
+}
+#bubble::after {
+  content: '';
+  position: absolute;
+  bottom: calc(-5px * var(--z));
+  left: 50%;
+  margin-left: calc(-5px * var(--z));
+  border: calc(5px * var(--z)) solid transparent;
+  border-bottom: 0;
+  border-top-color: var(--bubble-bg, var(--question));
+}
+#bubble.show { transform: translateX(-50%) scale(1); }
+#bubble.question { --bubble-bg: var(--question); animation: bob 0.9s ease-in-out infinite; }
+#bubble.done { --bubble-bg: var(--done); }
+#bubble.error { --bubble-bg: var(--error); color: #fff; }
+#bubble.sleep { --bubble-bg: transparent; box-shadow: none; color: #d6cdc6; font-size: calc(13px * var(--z)); text-shadow: 0 1px 2px rgba(0,0,0,.6); animation: drift 2.4s ease-in-out infinite; }
+#bubble.sleep::after { display: none; }
+#bubble.count { --bubble-bg: #2b2522; color: var(--working); font-size: calc(11px * var(--z)); --s: calc(20px * var(--z)); }
+
+@keyframes bob { 0%, 100% { margin-bottom: 0; } 50% { margin-bottom: calc(5px * var(--z)); } }
+@keyframes drift { 0% { opacity: 0.2; margin-bottom: -4px; } 50% { opacity: 1; } 100% { opacity: 0.2; margin-bottom: 8px; } }
+
+#badge {
+  position: absolute;
+  bottom: var(--pad-bottom);
+  left: calc(50% + var(--pet-w) / 2 - 12px * var(--z));
+  min-width: calc(18px * var(--z));
+  height: calc(18px * var(--z));
+  padding: 0 calc(5px * var(--z));
+  border-radius: calc(9px * var(--z));
+  font-size: calc(11px * var(--z));
+  font-weight: 700;
+  display: none;
+  place-items: center;
+  color: #1d1a18;
+  background: var(--question);
+  box-shadow: 0 0 0 2px rgba(20, 17, 16, 0.85);
+  pointer-events: none;
+}
+#badge.show { display: grid; }
+
+/* ------------------------------------------------------- whip + hustle */
+#pet.ouch { animation: ouch 0.45s ease; }
+@keyframes ouch {
+  15% { transform: translateX(calc(-50% - 7px)) rotate(-6deg); }
+  35% { transform: translateX(calc(-50% + 6px)) rotate(5deg); }
+  55% { transform: translateX(calc(-50% - 4px)) rotate(-3deg); }
+  80% { transform: translateX(calc(-50% + 2px)); }
+}
+/* A sweat drop: nervous while the whip is out, flying off while hustling. */
+body::after {
+  content: '';
+  position: absolute;
+  left: calc(50% + var(--pet-w) * 0.28);
+  bottom: calc(var(--sprite-bottom) + var(--pet-h) - var(--head-inset) - 6px * var(--z));
+  width: calc(5px * var(--z));
+  height: calc(7px * var(--z));
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: #8fdcff;
+  box-shadow: 0 0 0 1px rgba(20, 40, 60, 0.35);
+  opacity: 0;
+  pointer-events: none;
+}
+body.nervous::after { opacity: 0.9; animation: drip 1.6s ease-in infinite; }
+body.hustle::after { opacity: 1; animation: fling 0.5s ease-out infinite; }
+@keyframes drip { 0% { transform: translateY(0); opacity: 0; } 20% { opacity: 0.9; } 100% { transform: translateY(calc(14px * var(--z))); opacity: 0; } }
+@keyframes fling { 0% { transform: translate(0, 0); opacity: 1; } 100% { transform: translate(calc(12px * var(--z)), calc(-10px * var(--z))); opacity: 0; } }

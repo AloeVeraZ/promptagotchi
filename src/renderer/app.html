@@ -1,0 +1,275 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Promptagotchi</title>
+  <link rel="stylesheet" href="studio.css" />
+  <link rel="stylesheet" href="app.css" />
+</head>
+<body class="tab-home">
+  <header id="titlebar">
+    <nav id="tabs" role="tablist">
+      <button class="tab" data-tab="home" role="tab" title="Run: your pet and your sessions (⌘1)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="6" width="14" height="10" rx="1.5"/><path d="M9 10v2M15 10v2M7 16v3M10 16v3M14 16v3M17 16v3M3 11h2M19 11h2"/></svg>
+        <span>Run</span>
+      </button>
+      <button class="tab" data-tab="editor" role="tab" title="Editor: draw and tweak pets (⌘2)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>
+        <span>Editor</span>
+      </button>
+      <button class="tab" data-tab="settings" role="tab" title="Settings: Claude Code connection and options (⌘3)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.98 9.87 L21.68 10.47 L21.68 13.53 L18.98 14.13 L18.45 15.43 L19.93 17.76 L17.76 19.93 L15.43 18.45 L14.13 18.98 L13.53 21.68 L10.47 21.68 L9.87 18.98 L8.57 18.45 L6.24 19.93 L4.07 17.76 L5.55 15.43 L5.02 14.13 L2.32 13.53 L2.32 10.47 L5.02 9.87 L5.55 8.57 L4.07 6.24 L6.24 4.07 L8.57 5.55 L9.87 5.02 L10.47 2.32 L13.53 2.32 L14.13 5.02 L15.43 5.55 L17.76 4.07 L19.93 6.24 L18.45 8.57 Z"/><circle cx="12" cy="12" r="3.2"/></svg>
+        <span>Settings</span>
+      </button>
+      <button class="tab" data-tab="debug" role="tab" title="Debug: hook server, live events, simulator (⌘4)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 10l3 2-3 2M12 15h5"/></svg>
+        <span>Debug</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- RUN: the pet and your sessions. A fixed page: only the session list scrolls. -->
+  <section id="view-home" class="view" role="tabpanel">
+    <div class="page fixed">
+      <div class="hcard hero">
+        <div class="hero-stage"><div id="home-pet"></div></div>
+        <div class="hero-info">
+          <div class="kicker" id="pet-status">Starting…</div>
+          <h2 id="pet-name">Promptagotchi</h2>
+          <div class="hero-row">
+            <button id="btn-toggle" class="primary">Hide pet</button>
+            <button id="btn-corner">Move to corner</button>
+          </div>
+          <div class="hero-row">
+            <label class="inline">Pet <select id="sel-pet"></select></label>
+            <span class="lbl" style="margin-left:10px">Size</span>
+            <div class="seg" id="seg-size">
+              <button data-size="small">S</button><button data-size="medium">M</button><button data-size="large">L</button><button data-size="huge">XL</button>
+            </div>
+            <span class="muted small">scales with your screen</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hcard grow">
+        <div class="hhead"><h3>Sessions</h3><span class="muted small" id="sess-count"></span><span class="spacer"></span><button id="btn-clear" class="small">Clear finished</button></div>
+        <div class="table-wrap">
+          <table id="sess-table">
+            <thead><tr><th></th><th>Session</th><th>Doing</th><th>App</th><th>Source</th><th>Updated</th><th></th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-editor" class="view" role="tabpanel">
+  <aside id="side">
+        <h1>Pet Editor</h1>
+    <div class="side-actions">
+      <button id="new-blank">New blank pet</button>
+      <button id="new-copy">Copy this pet</button>
+    </div>
+    <div id="pet-list"></div>
+    <p class="hint">Pets live in <code>~/.promptagotchi/pets</code>. Codex and Petdex pets show up automatically.</p>
+  </aside>
+
+  <main id="main">
+        <section id="meta">
+      <label>Name <input id="f-name" maxlength="40" /></label>
+      <label>Id <input id="f-id" maxlength="40" pattern="[a-z0-9-_]+" /></label>
+      <label>Author <input id="f-author" maxlength="60" /></label>
+      <label class="wide">Description <input id="f-desc" maxlength="200" /></label>
+      <label class="size">Frame <input id="f-w" type="number" min="8" max="96" /> × <input id="f-h" type="number" min="8" max="96" /><button id="resize" class="small">Resize</button></label>
+      <div class="meta-actions">
+        <button id="reveal" class="ghost">Show in Finder</button>
+        <button id="save" class="primary">Save</button>
+        <button id="use">Save &amp; use</button>
+      </div>
+    </section>
+
+    <nav id="states"></nav>
+
+    <div id="readonly" hidden></div>
+
+    <section id="workbench">
+      <div id="toolbar">
+        <div class="tools">
+          <button data-tool="pencil" title="Pencil (P)">✎</button>
+          <button data-tool="eraser" title="Eraser (E)">⌫</button>
+          <button data-tool="fill" title="Fill (F)">▨</button>
+          <button data-tool="picker" title="Pick color (I)">⊙</button>
+        </div>
+        <label class="check"><input type="checkbox" id="onion" checked /> Onion skin</label>
+        <label class="check"><input type="checkbox" id="grid" checked /> Grid</label>
+        <span class="spacer"></span>
+        <button id="undo" title="Undo (⌘Z)">↶</button>
+        <button id="redo" title="Redo (⇧⌘Z)">↷</button>
+        <button id="flip" title="Mirror this frame">⇋</button>
+        <button id="shift-up" title="Nudge up">↑</button>
+        <button id="shift-down" title="Nudge down">↓</button>
+        <button id="shift-left" title="Nudge left">←</button>
+        <button id="shift-right" title="Nudge right">→</button>
+        <button id="clear" title="Clear this frame">Clear</button>
+      </div>
+
+      <div id="canvas-wrap"><canvas id="canvas"></canvas></div>
+
+      <div id="palette-bar">
+        <div id="palette"></div>
+        <label class="add-color" title="Add a color"><input type="color" id="new-color" value="#7cc4ff" />＋</label>
+      </div>
+
+      <div id="frames-bar">
+        <div id="frames"></div>
+        <div class="frame-actions">
+          <button id="f-add" title="Add a blank frame">＋ Frame</button>
+          <button id="f-dup" title="Duplicate this frame">Duplicate</button>
+          <button id="f-left" title="Move left">◀</button>
+          <button id="f-right" title="Move right">▶</button>
+          <button id="f-del" class="danger" title="Delete this frame">Delete</button>
+          <label>Frame ms <input id="f-ms" type="number" min="16" max="5000" step="10" /></label>
+          <label class="check"><input type="checkbox" id="f-loop" /> Loop</label>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <aside id="preview">
+        <h2>Preview</h2>
+    <div id="stage-preview"><div id="preview-pet"></div></div>
+    <div id="preview-states"></div>
+    <div id="warnings"></div>
+    <div class="help">
+      <h3>States</h3>
+      <dl>
+        <dt>idle</dt><dd>Nothing to do. Required.</dd>
+        <dt>working</dt><dd>Claude is busy. Typing on a laptop is classic.</dd>
+        <dt>question</dt><dd>A session needs you.</dd>
+        <dt>done</dt><dd>A session finished and is ready for you.</dd>
+        <dt>error</dt><dd>A turn stopped with an error.</dd>
+        <dt>sleep</dt><dd>Nothing happening for a while.</dd>
+        <dt>drag</dt><dd>You're carrying the pet around.</dd>
+        <dt>wave</dt><dd>Plays once when you hover.</dd>
+        <dt>jump</dt><dd>Plays once when a question arrives.</dd>
+        <dt>look</dt><dd>Idle fidget: glance around.</dd>
+        <dt>stretch</dt><dd>Idle fidget: a big stretch.</dd>
+      </dl>
+      <p>Missing states fall back to ones you have (for example <i>sleep → idle</i>), so a pet with just <b>idle</b> and <b>working</b> already works.</p>
+    </div>
+  </aside>
+
+  <div id="toast"></div>
+
+    </section>
+
+  <!-- SETTINGS: one scrolling page, nothing scrolls inside it. -->
+  <section id="view-settings" class="view" role="tabpanel">
+    <div class="page scroll">
+      <div class="settings">
+        <div class="hcard">
+          <h3>Claude Code connection</h3>
+          <div class="status-line"><span class="sdot" id="hook-dot"></span><span id="hook-status">…</span></div>
+          <p class="muted small" id="hook-help"></p>
+          <div class="hero-row">
+            <button id="btn-connect-full" class="primary">Connect + answering</button>
+            <button id="btn-connect-status">Status only</button>
+            <button id="btn-disconnect" class="danger">Disconnect</button>
+          </div>
+          <label class="check"><input type="checkbox" id="chk-answer" /> Answer prompts from the pet</label>
+          <label class="inline">Hold prompts for
+            <select id="sel-hold"><option value="20">20 s</option><option value="45">45 s</option><option value="90">90 s</option><option value="180">3 min</option></select>
+          </label>
+          <p class="muted small">Promptagotchi connects through Claude Code <b>hooks</b>: small entries in <code>~/.claude/settings.json</code> that send each session event to the pet on this Mac (127.0.0.1 only). No MCP server or account is involved. Without hooks the pet still sees every session from Claude’s status files.</p>
+          <ul class="hook-list" id="hook-list"></ul>
+        </div>
+
+        <div class="hcard">
+          <h3>Pet</h3>
+          <label class="check"><input type="checkbox" id="chk-sound" /> Play a little chirp when a session needs you</label>
+          <label class="check"><input type="checkbox" id="chk-quiet" /> List idle sessions too (dimmed)</label>
+          <p class="muted small">Right-click the pet for quick pet and size changes.</p>
+        </div>
+
+        <div class="hcard">
+          <h3>Shortcuts</h3>
+          <div class="sc-row"><span>Show / hide the pet</span><kbd class="sc" id="sc-shortcut"></kbd><button class="small" data-rec="shortcut">Change</button></div>
+          <div class="sc-row"><span>Whip mode on / off</span><kbd class="sc" id="sc-whipShortcut"></kbd><button class="small" data-rec="whipShortcut">Change</button></div>
+          <p class="muted small" id="sc-msg">Click Change, then press the keys you want: a ⌘, ⌃ or ⌥ combination plus a key. Esc cancels.</p>
+        </div>
+
+        <div class="hcard">
+          <h3>Whip</h3>
+          <label class="check"><input type="checkbox" id="chk-whip-sound" /> Crack sound</label>
+          <p class="muted small">Turn it on and off with the shortcut above, then bring your cursor near the pet. Once you’re close enough, the lash swings at the pet by itself, with a whiplash smear on fast swings. When it lands, it cracks, the pet flinches, and it goes into <b>⚡ Hustle mode</b> for a while. Every hit adds time. Misses are silent.</p>
+          <p class="muted small"><b>Hustle mode is only the pet’s animation.</b> It types and moves faster on screen. It never touches Claude, your sessions or your code: nothing about how Claude works changes. (For a faster Claude, Claude Code has <code>/fast</code>.)</p>
+        </div>
+
+        <div class="hcard">
+          <h3>Pets</h3>
+          <p class="muted small">Your pets live in <code id="pets-path"></code>. Codex pets (<code>~/.codex/pets</code>) and Petdex pets (<code>~/.petdex/pets</code>) show up automatically.</p>
+          <div class="hero-row">
+            <button id="btn-pets-folder">Open pets folder</button>
+            <button id="btn-pets-install">Install a pet from a folder…</button>
+            <button id="btn-pets-reload">Reload pets</button>
+          </div>
+        </div>
+
+        <div class="hcard">
+          <h3>Startup</h3>
+          <label class="check"><input type="checkbox" id="chk-login" /> Open Promptagotchi when you log in, so the pet is always there</label>
+          <p class="muted small" id="login-note"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEBUG: a fixed page; the event terminal fills it and is the only thing that scrolls. -->
+  <section id="view-debug" class="view" role="tabpanel">
+    <div class="page fixed">
+      <div class="debug-top">
+        <div class="hcard">
+          <h3>Status</h3>
+          <dl class="kv" id="debug-kv"></dl>
+          <div class="hero-row">
+            <button id="btn-data" class="small">Open data folder</button>
+            <button id="btn-settings" class="small">Open Claude settings.json</button>
+            <button id="btn-diag" class="small">Copy diagnostics</button>
+          </div>
+        </div>
+        <div class="hcard">
+          <h3>Simulator</h3>
+          <p class="muted small">Feeds pretend Claude sessions (subagents, plans, a few permission questions) into the pet through the real hook server, next to your real sessions. Stopping it removes them all from the list.</p>
+          <div class="hero-row">
+            <button id="btn-sim">Start simulator</button>
+            <label class="inline">with <select id="sel-sim"><option>4</option><option selected>8</option><option>12</option><option>20</option></select> sessions</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="hcard grow">
+        <div class="hhead">
+          <h3>Live events</h3>
+          <div class="filters" id="ev-filters">
+            <button data-cat="tools" class="on">Tool use</button>
+            <button data-cat="prompts" class="on">Prompts</button>
+            <button data-cat="stops" class="on">Stops</button>
+            <button data-cat="agents" class="on">Subagents</button>
+            <button data-cat="attention" class="on">Needs you</button>
+            <button data-cat="sessions" class="on">Sessions</button>
+          </div>
+          <span class="spacer"></span>
+          <label class="check small"><input type="checkbox" id="chk-follow" checked /> Follow</label>
+          <button id="btn-ev-clear" class="small">Clear</button>
+        </div>
+        <div id="event-log"><div class="muted small empty-log">Hook events show up here as they happen.</div></div>
+      </div>
+    </div>
+  </section>
+  <script src="bridge.js"></script>
+
+  <script src="petPlayer.js"></script>
+  <script src="studio.js"></script>
+  <script src="home.js"></script>
+</body>
+</html>

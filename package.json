@@ -1,0 +1,30 @@
+{
+  "name": "promptagotchi",
+  "version": "0.2.0",
+  "description": "A tiny pixel desk pet that lives on top of your screen and keeps an eye on every Claude Code session. Rust core (Tauri), HTML screens.",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "start": "tauri dev",
+    "build": "tauri build --bundles app",
+    "dist:mac": "bash scripts/build-mac.sh",
+    "test": "cargo test --manifest-path src-tauri/Cargo.toml",
+    "build:pip": "node scripts/build-pip.mjs",
+    "build:volt": "node scripts/build-volt.mjs",
+    "preview": "node scripts/preview-pet.mjs"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "desktop-pet",
+    "pixel-art",
+    "rust",
+    "tauri",
+    "overlay"
+  ],
+  "productName": "Promptagotchi",
+  "author": "AloeVeraZ",
+  "devDependencies": {
+    "@tauri-apps/cli": "2.12.6"
+  }
+}
